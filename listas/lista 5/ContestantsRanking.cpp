@@ -1,22 +1,17 @@
 #include <bits/stdc++.h>
 
-const int INF = INT_MAX; //a large number to represent infinity
-//if the graphs has weights
+const int INF = INT_MAX;
 
 using namespace std;
 
 struct Graph{
-    //pair<weight, edge>
-    vector<vector<pair<int,string>>> list;  //adjacency list
-    int numEdge;   //n of edges
-    int numVert; //n of vertices
-    vector<int> Mark;    // auxiliary marking array
+    map<string, unordered_set<string>> list;
+    int numEdge;
+    int numVert;
+    map<string,int> Mark;
 
-    Graph(int n){
-        numVert = n;
+    Graph(){
         numEdge = 0;
-        list.resize(n);
-        Mark.resize(n, 0);
     }
 };
 
@@ -28,67 +23,60 @@ int e(Graph *g){
     return g->numEdge;
 }
 
-int first(Graph *g, int v){
+string first(Graph *g, string v){
     if (!g->list[v].empty()){
-        return g->list[v].front().second;
+        return *(g->list[v].begin());
     }
-    return -1; //nao tem vizinhos
+    return "";
 }
 
-int next(Graph *g, int v, int w){
-    // if (g->list[v].size() > 0){
-
-    // }
+string next(Graph *g, string v, string w){
     for (auto i = g->list[v].begin(); i != g->list[v].end(); i++){
-        if (i->second == w){
+        if (*i == w){
             i++;
             if (i != g->list[v].end()){
-                return i->second;
+                return *i;
             }
             break;
         }
     }
-    return -1; // nao tem mais vizinhos
+    return "";
 }
 
-bool isEdge(Graph *g, int i, int j){
-    for (auto &edge : g->list[i]){
-        if (edge.second == j){
-            return true;
-        }
-    }
-    return false;
-}
-
-void setEdge(Graph *g, string i, string j){
-    g->list[i].push_back(make_pair(wt, j));
-    g->numEdge++;
-    
-}
-
-void setMark(Graph *g, int v, int val){
+void setMark(Graph *g, string v, int val){
     g->Mark[v] = val;
 }
 
-int getMark(Graph *g, int v){
+int getMark(Graph *g, string v){
     return g->Mark[v];
 }
 
-queue<pair<int, int>> Dist(Graph *g, int start){
-    queue<pair<int, int>> Q;
-    Q.push({0, start});
+void setEdge(Graph *g, string i, string j){
+    g->list[i].insert(j);
+    g->list[j].insert(i);
+    setMark(g, i, INF);
+    setMark(g, j, INF);
+    g->numEdge++;
+}
+
+//visitado >= 0
+//nao visitado = INF
+void BFS(Graph *g, string start){
+    queue<pair<string, int>> Q;
+    Q.push({start,0});
     setMark(g, start, 0);
     while (Q.size() > 0){
-        auto [dist, top] = Q.front();
+        auto [v, d] = Q.front();
         Q.pop();
-        for (auto e : g->list[top]){
-            if (getMark(g, e.second)==0){
-                setMark(g, e.second, dist+1);
-                Q.push({dist+1, e.second});
+        auto w = first(g, v);
+        while (w != ""){
+            if (getMark(g, w) == INF){
+                setMark(g, w, d+1);
+                Q.push({w, d+1});
             }
+            w = next(g, v, w);
         }
     }
-    return Q;
 }
 
 int main(){
@@ -98,13 +86,33 @@ int main(){
     
     for (int i = 0; i < tests; i++){
         cin >> teams;
-        Graph *g = new Graph(teams*3);
+        Graph *g = new Graph();
         for (int j = 0; j < teams; j++){
             cin >> name1 >> name2 >> name3;
+            setEdge(g, name1, name2);
+            setEdge(g, name1, name3);
+            setEdge(g, name2, name3);
+        }
+        BFS(g, "Ahmad");
+
+        vector<pair<int, string>> answ;
+        
+        for (auto [k, v] : g->Mark){
+            answ.push_back({v,k});    
+        }
+
+        stable_sort(answ.begin(), answ.end());
+        cout << answ.size() << '\n';
+        for (auto [v, k] : answ) {
+            if (v == INF){
+                cout << k << ' ' << "undefined" << '\n';
+            }
+            else{
+                cout << k << ' ' << v << '\n';
+            }
         }
 
         delete(g);
-        
     }
     return 0;
 }
