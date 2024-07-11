@@ -79,48 +79,15 @@ int getMark(Graph *g, int v){
     return g->Mark[v];
 }
 
-// void Dijkstra(Graph *g, int s, vector<int> &D){
-//     vector<int> P(n(g));
-//     priority_queue<element, vector<element>, greater<element>> pq;
-//     for (int i = 0; i < n(g); i++){
-//         D[i] = INF;
-//         P[i] = 0;
-//         setMark(g, i, 0);
-//     }
-//     pq.push({0, s, s});
-//     D[s] = 0;
-//     for (int i = 0; i < n(g); i++){
-//         element t;
-//         do{
-//             if (pq.empty()){return;}
-//             t = pq.top();
-//             pq.pop();
-//         }while (!getMark(g,t.to)==0);
-        
-//         setMark(g, t.to, 1);
-//         P[t.to] = t.from;
-
-//         auto w = first(g, t.to);
-//         while (w < n(g)){
-//             if (getMark(g, w) != 1 && D[w] > D[t.to]+weight(g, t.to, w)){
-//                 D[w] = D[t.to]+weight(g, t.to, w);
-//                 pq.push({D[w], t.to, w});
-//             }
-//             w = next(g, t.to, w);            
-//         }
-//     }
-// }
-
-void Dijkstra(Graph *g, int s, vector<int> &D){
-    vector<int> P(n(g));
+void Prim(Graph *g, vector<int> &D, vector<int> &V){
     priority_queue<element, vector<element>, greater<element>> pq;
     for (int i = 0; i < n(g); i++){
         D[i] = INF;
-        P[i] = 0;
+        V[i] = 0;
         setMark(g, i, 0);
     }
-    pq.push({0, s, s});
-    D[s] = 0;
+    pq.push({0, 0, 0});
+    D[0] = 0;
     for (int i = 0; i < n(g); i++){
         element t;
         do{
@@ -130,8 +97,7 @@ void Dijkstra(Graph *g, int s, vector<int> &D){
         }while (!getMark(g,t.to)==0);
         
         setMark(g, t.to, 1);
-        P[t.to] = t.from;
-
+        V[t.to] = t.from;
         for (auto e : g->list[t.to]){
             if (getMark(g, e.second) != 1 && D[e.second] > D[t.to]+weight(g, t.to, e.second)){
                 D[e.second] = D[t.to]+weight(g, t.to, e.second);
@@ -142,20 +108,24 @@ void Dijkstra(Graph *g, int s, vector<int> &D){
 }
 
 int main(){
-    int n, m, v;
-    cin >> n >> m >> v;
-    Graph *g = new Graph(n);
-    int a, b, wt;
-    for (int i = 0; i < m; i++){
-        cin >> a >> b >> wt;
-        setEdge(g, a, b, wt);
+    int n, m; cin >> n >> m;
+    int x, y, wt;
+    while (n != 0 && m!=0){
+        Graph *g = new Graph(n);
+        for (int i = 0; i < m; i++){
+            cin >> x >> y >> wt;
+            setEdge(g, x, y, wt);
+        }
+        vector<int> Dist(n);
+        vector<int> Vert(n);
+        Prim(g, Dist, Vert);
+        int sum = 0;
+        for (int i = 0; i < (int)Dist.size(); i++){
+            sum = sum + Dist[i];
+        }
+        cout << sum << '\n';
+        cin >> n >> m;
+        delete g;
     }
-    vector<int> Dist(n);
-    Dijkstra(g, v, Dist);
-    for (int i = 0; i < (int)Dist.size(); i++){
-        cout << Dist[i] << ' ';
-    }
-    cout << '\n';
-    delete g;
     return 0;
 }

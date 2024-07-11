@@ -79,6 +79,37 @@ int getMark(Graph *g, int v){
     return g->Mark[v];
 }
 
+// void Prim(Graph *g, vector<int> &D, vector<int> &V){
+//     priority_queue<element, vector<element>, greater<element>> pq;
+//     for (int i = 0; i < n(g); i++){
+//         D[i] = INF;
+//         V[i] = 0;
+//         setMark(g, i, 0);
+//     }
+//     pq.push({0, 0, 0});
+//     D[0] = 0;
+//     for (int i = 0; i < n(g); i++){
+//         element t;
+//         do{
+//             if (pq.empty()){return;}
+//             t = pq.top();
+//             pq.pop();
+//         }while (!getMark(g,t.to)==0);
+        
+//         setMark(g, t.to, 1);
+//         V[t.to] = t.from;
+
+//         auto w = first(g, t.to);
+//         while (w < n(g)){
+//             if (getMark(g, w) != 1 && D[w] > weight(g, t.to, w)){
+//                 D[w] = weight(g, t.to, w);
+//                 pq.push({D[w], t.to, w});
+//             }
+//             w = next(g, t.to, w);            
+//         }
+//     }
+// }
+
 void Prim(Graph *g, vector<int> &D, vector<int> &V){
     priority_queue<element, vector<element>, greater<element>> pq;
     for (int i = 0; i < n(g); i++){
@@ -98,14 +129,11 @@ void Prim(Graph *g, vector<int> &D, vector<int> &V){
         
         setMark(g, t.to, 1);
         V[t.to] = t.from;
-
-        auto w = first(g, t.to);
-        while (w < n(g)){
-            if (getMark(g, w) != 1 && D[w] > weight(g, t.to, w)){
-                D[w] = weight(g, t.to, w);
-                pq.push({D[w], t.to, w});
+        for (auto e : g->list[t.to]){
+            if (getMark(g, e.second) != 1 && D[e.second] > D[t.to]+weight(g, t.to, e.second)){
+                D[e.second] = D[t.to]+weight(g, t.to, e.second);
+                pq.push({D[e.second], t.to, e.second});
             }
-            w = next(g, t.to, w);            
         }
     }
 }
