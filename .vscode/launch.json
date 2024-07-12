@@ -4,12 +4,11 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
-
         {
             "name": "Build and debug active file - g++.exe",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${fileDirname}\\output$\\{fileBasenameNoExtension}.exe" ,
+            "program": "${fileDirname}\\output\\${fileBasenameNoExtension}.exe" ,
             "args": [
             ],
             "stopAtEntry": false,
@@ -30,7 +29,14 @@
                     "text": "-gdb-set disassembly-flavor intel",
                     "ignoreFailures": true
                 }
-            ]
+            ],
+            "preLaunchTask": "build", // Tarefa de compilação, se configurada
+            "miDebuggerArgs": "",
+            "logging": {
+                "trace": true,
+                "traceResponse": true,
+                "engineLogging": true
+            }
         }
     ]
 }

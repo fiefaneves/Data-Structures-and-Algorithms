@@ -32,43 +32,10 @@ int n(Graph *g){
     return g->numVert;
 }
 
-int e(Graph *g){
-    return g->numEdge;
-}
-
-int first(Graph *g, int v){
-    if (!g->list[v].empty()){
-        return g->list[v].front().second;
-    }
-    return INF; 
-}
-
-int next(Graph *g, int v, int w){
-    for (auto i = g->list[v].begin(); i != g->list[v].end(); i++){
-        if (i->second == w){
-            i++;
-            if (i != g->list[v].end()){
-                return i->second;
-            }
-            break;
-        }
-    }
-    return INF; 
-}
-
 void setEdge(Graph *g, int i, int j, int wt){
     g->list[i].push_back(make_pair(wt, j));
     g->list[j].push_back(make_pair(wt, i));
     g->numEdge++;
-}
-
-int weight(Graph *g, int i, int j){
-    for (auto edge : g->list[i]){
-        if (edge.second == j){
-            return edge.first;
-        }
-    }
-    return 0;
 }
 
 void setMark(Graph *g, int v, int val){
@@ -79,52 +46,47 @@ int getMark(Graph *g, int v){
     return g->Mark[v];
 }
 
-void Prim(Graph *g, vector<int> &D, vector<int> &V){
+void solve(Graph *g){
     priority_queue<element, vector<element>, greater<element>> pq;
-    for (int i = 0; i < n(g); i++){
-        D[i] = INF;
-        V[i] = 0;
-        setMark(g, i, 0);
-    }
     pq.push({0, 0, 0});
-    D[0] = 0;
-    for (int i = 0; i < n(g); i++){
-        element t;
-        do{
-            if (pq.empty()){return;}
-            t = pq.top();
-            pq.pop();
-        }while (!getMark(g,t.to)==0);
-        
+
+    int maxEdgeWeight = 0;
+    int edgesUsed = 0;
+
+    while (!pq.empty()){
+        element t = pq.top();
+        pq.pop();
+
+        if (getMark(g, t.to)==1) continue;
         setMark(g, t.to, 1);
-        V[t.to] = t.from;
-        for (auto e : g->list[t.to]){
-            if (getMark(g, e.second) != 1 && D[e.second] > D[t.to]+weight(g, t.to, e.second)){
-                D[e.second] = D[t.to]+weight(g, t.to, e.second);
-                pq.push({D[e.second], t.to, e.second});
+        maxEdgeWeight = max(maxEdgeWeight, t.dist);
+        edgesUsed++;
+
+        for (auto& e : g->list[t.to]){
+            if (getMark(g, e.second) != 1){
+                pq.push({e.first, t.to, e.second});
             }
         }
+    }
+
+    if (edgesUsed == n(g)){
+        cout << maxEdgeWeight << '\n';
+    } else{
+        cout << "IMPOSSIBLE" << '\n';
     }
 }
 
 int main(){
-    int n, m; cin >> n >> m;
+    int n, m;
     int x, y, wt;
-    while (n != 0 && m!=0){
+    while (cin >> n >> m){
+        if (n == 0 && m == 0) break;
         Graph *g = new Graph(n);
         for (int i = 0; i < m; i++){
             cin >> x >> y >> wt;
             setEdge(g, x, y, wt);
         }
-        vector<int> Dist(n);
-        vector<int> Vert(n);
-        Prim(g, Dist, Vert);
-        int sum = 0;
-        for (int i = 0; i < (int)Dist.size(); i++){
-            sum = sum + Dist[i];
-        }
-        cout << sum << '\n';
-        cin >> n >> m;
+        solve(g);
         delete g;
     }
     return 0;
