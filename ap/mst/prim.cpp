@@ -130,8 +130,8 @@ void Prim(Graph *g, vector<int> &D, vector<int> &V){
         setMark(g, t.to, 1);
         V[t.to] = t.from;
         for (auto e : g->list[t.to]){
-            if (getMark(g, e.second) != 1 && D[e.second] > D[t.to]+weight(g, t.to, e.second)){
-                D[e.second] = D[t.to]+weight(g, t.to, e.second);
+            if (getMark(g, e.second) != 1 && D[e.second] > weight(g, t.to, e.second)){
+                D[e.second] = weight(g, t.to, e.second);
                 pq.push({D[e.second], t.to, e.second});
             }
         }
