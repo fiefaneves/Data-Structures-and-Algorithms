@@ -1,0 +1,20 @@
+fmn@ug1c04:~/EDOO/aula2$ g++ -c main.cpp
+fmn@ug1c04:~/EDOO/aula2$ g++ -c is_prime.cpp
+fmn@ug1c04:~/EDOO/aula2$ g++ is_prime.o main.o
+fmn@ug1c04:~/EDOO/aula2$ ./a.out
+Enter a positive integer10
+10 is not primefmn@ug1c04:~/EDOO/aula2$ g++ -c main.cpp
+fmn@ug1c04:~/EDOO/aula2$ g++ -c is_prime.cpp
+fmn@ug1c04:~/EDOO/aula2$ g++ is_prime.o main.o
+fmn@ug1c04:~/EDOO/aula2$ ./a.out
+Enter a positive integer:
+25
+25 is not prime
+fmn@ug1c04:~/EDOO/aula2$ ./a.out
+Enter a positive integer:
+1
+1 is not prime
+fmn@ug1c04:~/EDOO/aula2$ ./a.out
+Enter a positive integer:
+7
+7 is prime
