@@ -1,0 +1,93 @@
+fmn@ug1c04:~/algorithm$ git clone https://github.com/fiefaneves/algorithm.git
+Cloning into 'algorithm'...
+remote: Enumerating objects: 254, done.
+remote: Counting objects: 100% (254/254), done.
+remote: Compressing objects: 100% (146/146), done.
+remote: Total 254 (delta 112), reused 234 (delta 92), pack-reused 0 (from 0)
+Receiving objects: 100% (254/254), 21.68 MiB | 11.36 MiB/s, done.
+Resolving deltas: 100% (112/112), done.
+fmn@ug1c04:~/algorithm$ ls
+algorithm  EDOO
+fmn@ug1c04:~/algorithm$ git status
+fatal: not a git repository (or any parent up to mount point /)
+Stopping at filesystem boundary (GIT_DISCOVERY_ACROSS_FILESYSTEM not set).
+fmn@ug1c04:~/algorithm$ ls
+algorithm
+fmn@ug1c04:~/algorithm$ git remove -v
+git: 'remove' is not a git command. See 'git --help'.
+
+The most similar command is
+	remote
+fmn@ug1c04:~/algorithm$ git remote -v
+fatal: not a git repository (or any parent up to mount point /)
+Stopping at filesystem boundary (GIT_DISCOVERY_ACROSS_FILESYSTEM not set).
+fmn@ug1c04:~/algorithm$ cd algorithm/
+fmn@ug1c04:~/algorithm/algorithm$ git status
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+fmn@ug1c04:~/algorithm/algorithm$ ls
+ ap    EDOO  '(Levitin)DesignAndAnalysisOfAlgorithms.pdf'  'mental maps'  'shaffer livro.pdf'
+ c++   ep     listas                                        output
+fmn@ug1c04:~/algorithm/algorithm$ git status
+On branch main
+Your branch is up to date with 'origin/main'.
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	EDOO/
+
+nothing added to commit but untracked files present (use "git add" to track)
+fmn@ug1c04:~/algorithm/algorithm$ git add .
+fmn@ug1c04:~/algorithm/algorithm$ git status
+On branch main
+Your branch is up to date with 'origin/main'.
+
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+	new file:   EDOO/aula2/.vscode/launch.json
+	new file:   EDOO/aula2/.vscode/settings.json
+	new file:   EDOO/aula2/.vscode/tasks.json
+	new file:   EDOO/aula2/a.out
+	new file:   EDOO/aula2/comandos.txt
+	new file:   EDOO/aula2/is_prime.cpp
+	new file:   EDOO/aula2/is_prime.o
+	new file:   EDOO/aula2/main.cpp
+	new file:   EDOO/aula2/main.o
+	new file:   EDOO/aula2/prime.h
+
+fmn@ug1c04:~/algorithm/algorithm$ code .
+fmn@ug1c04:~/algorithm/algorithm$ git commit -m "Adicionando pasta EDOO - aula 2"
+[main 14851f9] Adicionando pasta EDOO - aula 2
+ Committer: fmn <fmn@g1c04.cin.ufpe.br>
+Your name and email address were configured automatically based
+on your username and hostname. Please check that they are accurate.
+You can suppress this message by setting them explicitly. Run the
+following command and follow the instructions in your editor to edit
+your configuration file:
+
+    git config --global --edit
+
+After doing this, you may fix the identity used for this commit with:
+
+    git commit --amend --reset-author
+
+ 10 files changed, 90 insertions(+)
+ create mode 100644 EDOO/aula2/.vscode/launch.json
+ create mode 100644 EDOO/aula2/.vscode/settings.json
+ create mode 100644 EDOO/aula2/.vscode/tasks.json
+ create mode 100755 EDOO/aula2/a.out
+ create mode 100644 EDOO/aula2/comandos.txt
+ create mode 100644 EDOO/aula2/is_prime.cpp
+ create mode 100644 EDOO/aula2/is_prime.o
+ create mode 100644 EDOO/aula2/main.cpp
+ create mode 100644 EDOO/aula2/main.o
+ create mode 100644 EDOO/aula2/prime.h
+fmn@ug1c04:~/algorithm/algorithm$ git status
+On branch main
+Your branch is ahead of 'origin/main' by 1 commit.
+  (use "git push" to publish your local commits)
+
+nothing to commit, working tree clean
+fmn@ug1c04:~/algorithm/algorithm$ git push origin main
