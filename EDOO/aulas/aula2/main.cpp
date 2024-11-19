@@ -1,3 +1,4 @@
+//manipulação de arquivos
 #include <bits/stdc++.h>
 #include "prime.h"
 
