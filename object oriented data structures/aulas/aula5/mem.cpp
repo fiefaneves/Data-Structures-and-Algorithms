@@ -1,5 +1,3 @@
-//Roteiro
-
 #include <bits/stdc++.h>
 
 using namespace std;
@@ -19,10 +17,6 @@ int main(){
 
     free(v);
     cout << *n << '\n';
-
-// Arrays unidimensionais
-
-
 
     return 0;
 }
