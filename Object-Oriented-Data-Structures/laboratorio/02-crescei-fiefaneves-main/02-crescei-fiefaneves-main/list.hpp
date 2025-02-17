@@ -4,14 +4,6 @@
 #include <iostream>
 #include <bits/stdc++.h>
 
-
-// -----------------------------------------------------------------
-// DECLARACOES DOS TAD
-// -----------------------------------------------------------------
-
-//
-// Classe abstrata/Interface para listas
-//
 template <typename T>
 class List
 {
@@ -20,8 +12,12 @@ public:
 	int size() const; // retorna o tamanho da lista
 	virtual T &operator[](int pos) = 0;  // retorna o elemento da posicao pos
 	virtual void insert(int pos, T val) = 0; // insere val na posicao pos
-	void append(T val); // adiciona ao final
-	void prepend(T val); // adiciona no inicio
+	void append(T val){ // adiciona ao final
+		insert(sz, val);
+	}
+	void prepend(T val){ // adiciona no inicio
+		insert(0, val);
+	}
 	virtual T remove(int pos) = 0; // remove e retorna o elemento da posicao pos
 protected:
 	int sz{0}; // tamanho da lista
@@ -35,8 +31,10 @@ class LinkedList : public List<T>
 {
 	// Tipo no da lista encadeada
 	struct Node {
-		explicit Node(T v, Node *nxt = nullptr): val{v}, next{nxt} { }
-		explicit Node(Node *nxt = nullptr): next{nxt} { }
+        Node() {};
+		explicit Node(T v): val(v), next(nullptr) {}
+		// explicit Node(T v, Node *nxt = nullptr): val{v}, next{nxt} { }
+		// explicit Node(Node *nxt = nullptr): next{nxt} { }
 		~Node() {
 			//cout << "deleting " << val << endl;
 		}
@@ -47,8 +45,8 @@ class LinkedList : public List<T>
 public:
 	// LinkedList();
 	// ~LinkedList();
-
 	LinkedList(){head = new Node(); this->sz = 0;};
+    //LinkedList() : head(nullptr), tail(nullptr) {}
 	~LinkedList(){
         Node *cur = head;
         while (cur != nullptr) {
@@ -63,6 +61,7 @@ public:
 		assert(pos < this->sz);
 		return locate(pos)->next->val;
 	}
+
 	void insert(int pos, T val) override{
 		assert(pos <= this->sz);
         Node *cur = locate(pos);
@@ -71,6 +70,7 @@ public:
         cur->next = new_node;
         this->sz++;
 	}
+
 	T remove(int pos) override{
 		assert(pos < this->sz);
 		Node *cur = locate(pos);
@@ -86,15 +86,14 @@ public:
 	// Metodos adicionais
 
 	// Concatena a lista other ao final desta lista
-	// Os elementos devem ser removidos de other
-	// mas a lista other nao deve ser destruida
+	/*Os elementos devem ser removidos de other
+	mas a lista other nao deve ser destruida*/
 	void merge(LinkedList<T> *other){
 		Node *cur = head;
 		while (cur->next != nullptr) {
 			cur = cur->next;
 		}
 		cur->next = other->head->next;
-		//this->sz += other->this->sz; //?
 		this->sz += other->sz;
 		other->head->next = nullptr;
 		other->sz = 0;
@@ -156,10 +155,13 @@ public:
 	TYPE Type() const{ // retorna o tipo da SQ (vide enum TYPE)
 		return type;
 	}
+
 	SQ(TYPE t): type(t) {} // recebe o tipo do SQ na construcao
+
 	int size() const;{ // retorna o numero de elementos na SQ
 		return list.size();
 	}
+
 	const T &peek(){ // retorna uma referencia para o elemento no topo/frente da pilha/fila
 		if (type == STACK) {
 			return list[list.size() - 1];
@@ -167,23 +169,56 @@ public:
 			return list[0];
 		}
 	}
-	void push(T val); // empilha/enfileira
-	T pop(); // desempilha/desenfileira
-	void transform(); // transforma de pilha para fila ou vice versa
+
+	void push(T val){ // empilha/enfileira
+		if (type == QUEUE) {
+			list.append(val);
+		} else {
+			list.prepend(val);
+		}
+	} 
+
+	T pop(){ // desempilha/desenfileira
+		if (type == QUEUE && list.size() > 0) {
+			return list.remove(0);
+		} else if (type == STACK && list.size() > 0) {
+			return list.remove(list.size() - 1);
+		}
+	} 
+
+	void transform(){ // transforma de pilha para fila ou vice versa
+		if (type == STACK) {
+			type = QUEUE;
+		} else {
+			type = STACK;
+		}
+	} 
+
 	// Divide como no enunciado:
 	// os primeiros floor(n/2) elementos permanecesm nesta SQ
 	// e os demais sao retornados numa nova SQ
-	SQ<T> *split();
+	SQ<T> *split(){
+		LinkedList<T> *new_list = list.split();
+		if (new_list) {
+			SQ<T> *new_sq = new SQ<T>(type);
+			new_sq->list.merge(new_list);
+			return new_sq;
+		}
+		return nullptr;
+	}
+
 	// Combina como enunciado:
 	// os elementos de other sao transferidos para esta SQ,
 	// de forma que other fica vazia, mas nao eh destruida
-	void merge(SQ<T> *other);
+	void merge(SQ<T> *other){
+		if (type == other->Type()) {
+			list.merge(&other->list);
+		}
+	}
+
 private:
 	TYPE type; // tipo da SQ
 	LinkedList<T> list; // lista que armazena os elementos
-
-	// ADD CODE HERE
-	// Lembre da composicao
 };
 
 template <typename T>
@@ -191,81 +226,3 @@ int List<T>::size() const
 {
 	return this->sz;
 }
-
-
-// ADD CODE HERE
-// Definicoes dos metodos
-
-
-/*
-template <typename T>
-class SQ {
-private:
-    LinkedList<T> list;
-    TYPE type;
-
-public:
-    SQ(TYPE t) : type(t) {}
-
-    TYPE Type() const {
-        return type;
-    }
-
-    int size() const {
-        return list.size();
-    }
-
-    const T& peek() {
-        if (type == STACK) {
-            return list[list.size() - 1];
-        } else {
-            return list[0];
-        }
-    }
-
-    void enqueue(T val) {
-        if (type == QUEUE) {
-            list.insert(list.size(), val);
-        }
-    }
-
-    void dequeue() {
-        if (type == QUEUE && list.size() > 0) {
-            list.remove(0);
-        }
-    }
-
-    void push(T val) {
-        if (type == STACK) {
-            list.insert(list.size(), val);
-        }
-    }
-
-    void pop() {
-        if (type == STACK && list.size() > 0) {
-            list.remove(list.size() - 1);
-        }
-    }
-
-    void split() {
-        LinkedList<T>* newList = list.split();
-        if (newList) {
-            // Handle the new list as needed
-        }
-    }
-
-    void merge(SQ<T>& other) {
-        if (type == other.Type()) {
-            list.merge(&other.list);
-        }
-    }
-
-    void transform() {
-        if (type == STACK) {
-            type = QUEUE;
-        } else {
-            type = STACK;
-        }
-    }
-};
-*/

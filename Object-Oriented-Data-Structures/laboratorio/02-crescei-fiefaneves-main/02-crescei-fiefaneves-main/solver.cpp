@@ -5,11 +5,12 @@
 
 using namespace std;
 
+template <typename T>
 int main(){
 	freopen("1.in", "r", stdin);
 
-	//create the list
-	//create the stack
+	// SQ<auto> *sq = new SQ<auto>(QUEUE);
+	SQ<T> *sq = new SQ<T>(QUEUE);
 	int nCases;
 	cin >> nCases;
 	string op;
@@ -19,26 +20,27 @@ int main(){
 		while (op != "END"){
 			if (op=="ADD"){
 				cin >> pos >> val;
-				/* code */
+				sq->push(pos, val);				
 			}
 			else if (op == "DEL"){
 				cin >> pos;
-				/* code */
+				sq->pop(pos);
 			}
 			else if (op == "SPL"){
 				cin >> pos;
-				/* code */
+				sq->split();
 			}
 			else if (op == "MER"){
 				cin >> pos >> pos1;
-				/* code */
+				sq->merge();
 			}
 			else if (op == "TRA"){
 				cin >> pos;
-				/* code */
+				sq->transform();
 			}
 			cin >> op;
 		}
-		//clear list and stack for the next case
+		cout << "Case " << caseNo << ": " << endl;
+
 	}
 }
