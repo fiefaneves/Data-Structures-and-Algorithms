@@ -6,6 +6,8 @@
 using namespace std;
 
 int main(){
+	freopen("1.in", "r", stdin);
+
 	//create the list
 	//create the stack
 	int nCases;
