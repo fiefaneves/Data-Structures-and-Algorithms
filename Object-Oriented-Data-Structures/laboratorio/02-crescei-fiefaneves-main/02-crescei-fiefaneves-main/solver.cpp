@@ -5,42 +5,61 @@
 
 using namespace std;
 
-template <typename T>
-int main(){
-	freopen("1.in", "r", stdin);
+int main() {
+	freopen("5.in", "r", stdin);
 
-	// SQ<auto> *sq = new SQ<auto>(QUEUE);
-	SQ<T> *sq = new SQ<T>(QUEUE);
 	int nCases;
 	cin >> nCases;
 	string op;
 	int pos, val, pos1;
+	LinkedList<SQ<int>*> l;
+	l.append(new SQ<int>(QUEUE));
 	for (int caseNo = 0; caseNo < nCases; caseNo++) {
 		cin >> op;
 		while (op != "END"){
-			if (op=="ADD"){
+			if (op == "ADD"){
 				cin >> pos >> val;
-				sq->push(pos, val);				
+				if (pos < l.size()){
+					l[pos]->push(val);
+				}
 			}
 			else if (op == "DEL"){
 				cin >> pos;
-				sq->pop(pos);
+				if (pos < l.size()){
+					l[pos]->pop();
+				}
 			}
 			else if (op == "SPL"){
 				cin >> pos;
-				sq->split();
+				if (pos < l.size()){
+					l.insert(pos + 1, l[pos]->split());
+				}
 			}
 			else if (op == "MER"){
 				cin >> pos >> pos1;
-				sq->merge();
+				if (pos < l.size() && pos1 < l.size() && pos != pos1){
+					l[pos]->merge(l[pos1]);
+					l.remove(pos1);
+				}
 			}
 			else if (op == "TRA"){
 				cin >> pos;
-				sq->transform();
+				if (pos < l.size()){
+					l[pos]->transform();
+				}
 			}
 			cin >> op;
 		}
-		cout << "Case " << caseNo << ": " << endl;
-
+		cout << "caso " << caseNo << ": ";
+		for (int i = 0; i < l.size(); i++) {
+			if (l[i]->size() > 0) {
+				cout << l[i]->peek() << " ";
+			} else {
+				cout << "? ";
+			}
+		}
+		cout << endl;
+		l.clear();
+		l.append(new SQ<int>(QUEUE));
 	}
 }
