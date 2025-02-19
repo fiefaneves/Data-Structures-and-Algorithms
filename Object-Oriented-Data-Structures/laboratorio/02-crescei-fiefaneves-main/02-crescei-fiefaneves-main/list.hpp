@@ -36,8 +36,6 @@ class LinkedList : public List<T>
 	struct Node {
         explicit Node() {};
 		explicit Node(T v): val(v), next(nullptr) {}
-		// explicit Node(T v, Node *nxt = nullptr): val{v}, next{nxt} { }
-		// explicit Node(Node *nxt = nullptr): next{nxt} { }
 		~Node() {
 			//cout << "deleting " << val << endl;
 		}
@@ -46,10 +44,7 @@ class LinkedList : public List<T>
 	};
 
 public:
-	// LinkedList();
-	// ~LinkedList();
 	LinkedList(){head = new Node(); this->size() = 0;};
-    //LinkedList() : head(nullptr), tail(nullptr) {}
 	~LinkedList(){
         Node *cur = head;
         while (cur != nullptr) {
@@ -67,10 +62,6 @@ public:
 
 	void insert(int pos, T val) override{
 		assert(pos <= this->size());
-		// if (pos == this->size()){
-			// this->append(val);
-			// return;
-		// }
         Node *cur = locate(pos);
         Node *new_node = new Node(val);
         new_node->next = cur->next;
@@ -99,10 +90,6 @@ public:
 		head->next = nullptr;
 		this->size() = 0;
 	}
-
-	//quando pergunto pro chatgpt ele diz q o pop ta errado kkk to com odio ja
-	//e corrige pra como tava antes
-	//stack -> remove do final da list
 
 public:
 	// Metodos adicionais

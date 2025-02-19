@@ -6,7 +6,7 @@
 using namespace std;
 
 int main() {
-	freopen("5.in", "r", stdin);
+	freopen("1.in", "r", stdin);
 
 	int nCases;
 	cin >> nCases;
@@ -50,12 +50,13 @@ int main() {
 			}
 			cin >> op;
 		}
-		cout << "caso " << caseNo << ": ";
+		cout << "caso " << caseNo << ":";
 		for (int i = 0; i < l.size(); i++) {
+			cout << " ";
 			if (l[i]->size() > 0) {
-				cout << l[i]->peek() << " ";
+				cout << l[i]->peek();
 			} else {
-				cout << "? ";
+				cout << "?";
 			}
 		}
 		cout << endl;
